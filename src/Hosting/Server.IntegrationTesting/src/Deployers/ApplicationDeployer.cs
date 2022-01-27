@@ -58,7 +58,7 @@ public abstract class ApplicationDeployer : IDisposable
         }
     }
 
-    private RuntimeFlavor GetRuntimeFlavor(string tfm)
+    private static RuntimeFlavor GetRuntimeFlavor(string tfm)
     {
         if (Tfm.Matches(Tfm.Net462, tfm))
         {
@@ -179,7 +179,7 @@ public abstract class ApplicationDeployer : IDisposable
 
     protected void StartTimer()
     {
-        Logger.LogInformation($"Deploying {DeploymentParameters.ToString()}");
+        Logger.LogInformation($"Deploying {DeploymentParameters}");
         _stopwatch.Start();
     }
 

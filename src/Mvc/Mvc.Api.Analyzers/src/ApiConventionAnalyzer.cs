@@ -34,7 +34,7 @@ public class ApiConventionAnalyzer : DiagnosticAnalyzer
         });
     }
 
-    private void InitializeWorker(CompilationStartAnalysisContext compilationStartAnalysisContext, ApiControllerSymbolCache symbolCache)
+    private static void InitializeWorker(CompilationStartAnalysisContext compilationStartAnalysisContext, ApiControllerSymbolCache symbolCache)
     {
         compilationStartAnalysisContext.RegisterOperationAction(operationStartContext =>
         {
@@ -89,7 +89,6 @@ public class ApiConventionAnalyzer : DiagnosticAnalyzer
                         declaredMetadata.StatusCode));
                 }
             }
-
         }, OperationKind.MethodBody);
     }
 

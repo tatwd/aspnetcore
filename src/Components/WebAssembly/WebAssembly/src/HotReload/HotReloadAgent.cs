@@ -185,7 +185,7 @@ internal sealed class HotReloadAgent : IDisposable
             {
                 if (TryGetModuleId(assembly) is Guid moduleId && moduleId == item.ModuleId)
                 {
-                    MetadataUpdater.ApplyUpdate(assembly, item.MetadataDelta, item.ILDelta, ReadOnlySpan<byte>.Empty);
+                    MetadataUpdater.ApplyUpdate(assembly, item.MetadataDelta, item.ILDelta, item.PdbBytes ?? ReadOnlySpan<byte>.Empty);
                 }
             }
 
@@ -214,7 +214,7 @@ internal sealed class HotReloadAgent : IDisposable
         }
     }
 
-    private Type[] GetMetadataUpdateTypes(IReadOnlyList<UpdateDelta> deltas)
+    private static Type[] GetMetadataUpdateTypes(IReadOnlyList<UpdateDelta> deltas)
     {
         List<Type>? types = null;
 

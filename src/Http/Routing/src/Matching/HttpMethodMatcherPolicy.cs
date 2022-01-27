@@ -162,7 +162,7 @@ public sealed class HttpMethodMatcherPolicy : MatcherPolicy, IEndpointComparerPo
         if (needs405Endpoint == true)
         {
             // We saw some endpoints coming in, and we eliminated them all.
-            httpContext.SetEndpoint(CreateRejectionEndpoint(methods!.OrderBy(m => m, StringComparer.OrdinalIgnoreCase)));
+            httpContext.SetEndpoint(CreateRejectionEndpoint(methods?.OrderBy(m => m, StringComparer.OrdinalIgnoreCase)));
             httpContext.Request.RouteValues = null!;
         }
 
@@ -291,11 +291,11 @@ public sealed class HttpMethodMatcherPolicy : MatcherPolicy, IEndpointComparerPo
         // We don't bother returning a 405 when the CORS preflight method doesn't exist.
         // The developer calling the API will see it as a CORS error, which is fine because
         // there isn't an endpoint to check for a CORS policy.
-        if (!edges.TryGetValue(new EdgeKey(AnyMethod, false), out var matches))
+        if (!edges.TryGetValue(new EdgeKey(AnyMethod, false), out _))
         {
             // Methods sorted for testability.
             var endpoint = CreateRejectionEndpoint(allHttpMethods);
-            matches = new List<Endpoint>() { endpoint, };
+            var matches = new List<Endpoint>() { endpoint, };
             edges[new EdgeKey(AnyMethod, false)] = matches;
         }
 
@@ -308,7 +308,7 @@ public sealed class HttpMethodMatcherPolicy : MatcherPolicy, IEndpointComparerPo
 
         return policyNodeEdges;
 
-        (IReadOnlyList<string> httpMethods, bool acceptCorsPreflight) GetHttpMethods(Endpoint e)
+        static (IReadOnlyList<string> httpMethods, bool acceptCorsPreflight) GetHttpMethods(Endpoint e)
         {
             var metadata = e.Metadata.GetMetadata<IHttpMethodMetadata>();
             return metadata == null ? (Array.Empty<string>(), false) : (metadata.HttpMethods, metadata.AcceptCorsPreflight);
@@ -398,9 +398,9 @@ public sealed class HttpMethodMatcherPolicy : MatcherPolicy, IEndpointComparerPo
         }
     }
 
-    private static Endpoint CreateRejectionEndpoint(IEnumerable<string> httpMethods)
+    private static Endpoint CreateRejectionEndpoint(IEnumerable<string>? httpMethods)
     {
-        var allow = string.Join(", ", httpMethods);
+        var allow = httpMethods is null ? string.Empty : string.Join(", ", httpMethods);
         return new Endpoint(
             (context) =>
             {
