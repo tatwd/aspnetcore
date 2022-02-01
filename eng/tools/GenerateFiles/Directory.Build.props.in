@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <DefaultNetCoreTargetFramework>${DefaultNetCoreTargetFramework}</DefaultNetCoreTargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors Condition="'$(BuildingInsideVisualStudio)' != 'true'">true</TreatWarningsAsErrors>
     <AppHostPackVersion Condition=" '$(AppHostPackVersion)' == '' ">${AppHostPackVersion}</AppHostPackVersion>
   </PropertyGroup>
 </Project>
