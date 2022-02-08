@@ -351,5 +351,6 @@ public class MaxRequestBodySizeTests : LoggedTest
     {
         var log = Assert.Single(TestSink.Writes, w => w.LoggerName == "Microsoft.AspNetCore.Server.IIS.Core.IISHttpServer" && w.LogLevel > LogLevel.Debug);
         Assert.Equal(new EventId(2, "ApplicationError"), log.EventId);
+        Assert.IsType<BadHttpRequestException>(log.Exception);
     }
 }
