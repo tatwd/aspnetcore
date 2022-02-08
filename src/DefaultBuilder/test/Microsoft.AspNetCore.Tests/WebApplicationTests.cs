@@ -320,11 +320,11 @@ public class WebApplicationTests
             ContentRootPath = contentRoot
         });
 
-        builder.Host.UseContentRoot(contentRoot + Path.DirectorySeparatorChar);
+        builder.Host.UseContentRoot(contentRoot);
         builder.Host.UseContentRoot(contentRoot.ToUpperInvariant());
         builder.Host.UseContentRoot(contentRoot.ToLowerInvariant());
 
-        builder.WebHost.UseContentRoot(contentRoot + Path.DirectorySeparatorChar);
+        builder.WebHost.UseContentRoot(contentRoot);
         builder.WebHost.UseContentRoot(contentRoot.ToUpperInvariant());
         builder.WebHost.UseContentRoot(contentRoot.ToLowerInvariant());
     }
@@ -351,7 +351,7 @@ public class WebApplicationTests
 
             var builder = new WebApplicationBuilder(options);
 
-            Assert.Equal(contentRoot + Path.DirectorySeparatorChar, builder.Environment.ContentRootPath);
+            Assert.Equal(contentRoot, builder.Environment.ContentRootPath);
             Assert.Equal(fullWebRootPath, builder.Environment.WebRootPath);
 
             builder.WebHost.UseWebRoot(webRoot);
@@ -379,7 +379,7 @@ public class WebApplicationTests
 
             var builder = new WebApplicationBuilder(options);
 
-            Assert.Equal(contentRoot + Path.DirectorySeparatorChar, builder.Environment.ContentRootPath);
+            Assert.Equal(contentRoot, builder.Environment.ContentRootPath);
             Assert.Equal(fullWebRootPath, builder.Environment.WebRootPath);
 
             builder.WebHost.UseWebRoot(fullWebRootPath);
@@ -412,7 +412,7 @@ public class WebApplicationTests
 
             var builder = new WebApplicationBuilder(options);
 
-            Assert.Equal(contentRoot + Path.DirectorySeparatorChar, builder.Environment.ContentRootPath);
+            Assert.Equal(contentRoot, builder.Environment.ContentRootPath);
             Assert.Equal(fullWebRootPath, builder.Environment.WebRootPath);
 
             builder.WebHost.UseWebRoot(webRoot);
@@ -484,13 +484,13 @@ public class WebApplicationTests
                     {
                         Assert.Equal(nameof(WebApplicationTests), context.HostingEnvironment.ApplicationName);
                         Assert.Equal(envName, context.HostingEnvironment.EnvironmentName);
-                        Assert.Equal(contentRoot + Path.DirectorySeparatorChar, context.HostingEnvironment.ContentRootPath);
+                        Assert.Equal(contentRoot, context.HostingEnvironment.ContentRootPath);
                     });
                 });
 
             Assert.Equal(nameof(WebApplicationTests), builder.Environment.ApplicationName);
             Assert.Equal(envName, builder.Environment.EnvironmentName);
-            Assert.Equal(contentRoot + Path.DirectorySeparatorChar, builder.Environment.ContentRootPath);
+            Assert.Equal(contentRoot, builder.Environment.ContentRootPath);
             Assert.Equal(fullWebRootPath, builder.Environment.WebRootPath);
         }
         finally
@@ -532,13 +532,13 @@ public class WebApplicationTests
                     {
                         Assert.Equal(nameof(WebApplicationTests), context.HostingEnvironment.ApplicationName);
                         Assert.Equal(envName, context.HostingEnvironment.EnvironmentName);
-                        Assert.Equal(contentRoot + Path.DirectorySeparatorChar, context.HostingEnvironment.ContentRootPath);
+                        Assert.Equal(contentRoot, context.HostingEnvironment.ContentRootPath);
                     });
                 });
 
             Assert.Equal(nameof(WebApplicationTests), builder.Environment.ApplicationName);
             Assert.Equal(envName, builder.Environment.EnvironmentName);
-            Assert.Equal(contentRoot + Path.DirectorySeparatorChar, builder.Environment.ContentRootPath);
+            Assert.Equal(contentRoot, builder.Environment.ContentRootPath);
             Assert.Equal(fullWebRootPath, builder.Environment.WebRootPath);
         }
         finally
@@ -577,13 +577,13 @@ public class WebApplicationTests
                     {
                         Assert.Equal(nameof(WebApplicationTests), context.HostingEnvironment.ApplicationName);
                         Assert.Equal(envName, context.HostingEnvironment.EnvironmentName);
-                        Assert.Equal(contentRoot + Path.DirectorySeparatorChar, context.HostingEnvironment.ContentRootPath);
+                        Assert.Equal(contentRoot, context.HostingEnvironment.ContentRootPath);
                     });
                 });
 
             Assert.Equal(nameof(WebApplicationTests), builder.Environment.ApplicationName);
             Assert.Equal(envName, builder.Environment.EnvironmentName);
-            Assert.Equal(contentRoot + Path.DirectorySeparatorChar, builder.Environment.ContentRootPath);
+            Assert.Equal(contentRoot, builder.Environment.ContentRootPath);
             Assert.Equal(fullWebRootPath, builder.Environment.WebRootPath);
         }
         finally
@@ -917,9 +917,7 @@ public class WebApplicationTests
         var builder = WebApplication.CreateBuilder();
         await using var app = builder.Build();
 
-        var wrappedProviders = ((IConfigurationRoot)app.Configuration).Providers.OfType<IEnumerable<IConfigurationProvider>>();
-        var unwrappedProviders = wrappedProviders.Select(p => Assert.Single(p));
-        Assert.Single(unwrappedProviders.OfType<RandomConfigurationProvider>());
+        Assert.Single(((IConfigurationRoot)app.Configuration).Providers.OfType<RandomConfigurationProvider>());
     }
 
     [Fact]
